@@ -1,0 +1,105 @@
+{
+  "name": "poly-iac-lsp",
+  "displayName": "PolyIaC LSP",
+  "description": "Language Server Protocol for Infrastructure as Code (OpenTofu, Pulumi)",
+  "version": "0.1.0",
+  "license": "PMPL-1.0-or-later",
+  "publisher": "hyperpolymath",
+  "author": {
+    "name": "Jonathan D.A. Jewell",
+    "email": "jonathan.jewell@open.ac.uk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hyperpolymath/poly-iac-lsp"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "infrastructure",
+    "iac",
+    "opentofu",
+    "terraform",
+    "pulumi",
+    "hcl"
+  ],
+  "activationEvents": [
+    "onLanguage:terraform",
+    "onLanguage:hcl",
+    "workspaceContains:**/*.tf",
+    "workspaceContains:Pulumi.yaml"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "terraform",
+        "aliases": ["Terraform", "OpenTofu", "HCL"],
+        "extensions": [".tf", ".tfvars"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "poly-iac.init",
+        "title": "PolyIaC: Initialize Project"
+      },
+      {
+        "command": "poly-iac.plan",
+        "title": "PolyIaC: Plan Changes"
+      },
+      {
+        "command": "poly-iac.apply",
+        "title": "PolyIaC: Apply Changes"
+      },
+      {
+        "command": "poly-iac.validate",
+        "title": "PolyIaC: Validate Configuration"
+      },
+      {
+        "command": "poly-iac.destroy",
+        "title": "PolyIaC: Destroy Infrastructure"
+      }
+    ],
+    "configuration": {
+      "title": "PolyIaC LSP",
+      "properties": {
+        "poly-iac.tool": {
+          "type": "string",
+          "enum": ["opentofu", "pulumi", "auto"],
+          "default": "auto",
+          "description": "IaC tool to use (auto-detect by default)"
+        },
+        "poly-iac.opentofu.path": {
+          "type": "string",
+          "default": "tofu",
+          "description": "Path to OpenTofu executable"
+        },
+        "poly-iac.pulumi.path": {
+          "type": "string",
+          "default": "pulumi",
+          "description": "Path to Pulumi executable"
+        },
+        "poly-iac.trace.server": {
+          "type": "string",
+          "enum": ["off", "messages", "verbose"],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "echo 'TODO: TypeScript compilation not yet implemented'",
+    "watch": "echo 'TODO: Watch mode not yet implemented'",
+    "package": "echo 'TODO: VSIX packaging not yet implemented'"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

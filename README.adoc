@@ -1,0 +1,130 @@
+= poly-iac-lsp
+:toc: macro
+:toclevels: 3
+:license-badge: https://img.shields.io/badge/License-PMPL--1.0-blue.svg
+:license-url: https://github.com/hyperpolymath/palimpsest-license
+:elixir-badge: https://img.shields.io/badge/elixir-1.17+-purple.svg
+:elixir-url: https://elixir-lang.org/
+
+image:{license-badge}[License,link={license-url}]
+image:{elixir-badge}[Elixir,link={elixir-url}]
+
+toc::[]
+
+== Overview
+
+*poly-iac-lsp* provides Language Server Protocol (LSP) integration for Infrastructure as Code (IaC) tools. Built with Elixir's BEAM VM, each IaC adapter runs as an isolated process with automatic fault recovery.
+
+=== FOSS-First Emphasis
+
+Following hyperpolymath's FOSS-first policy, we prioritize open source IaC tools:
+
+* *OpenTofu* over Terraform (MPL-2.0 vs BSL)
+* Self-hosted backends over proprietary cloud services
+* Community-driven tools over vendor-locked solutions
+
+== Features
+
+* 🔄 *Auto-detection*: Detects IaC tool from project files
+* ✨ *Auto-completion*: HCL syntax, resource types, provider attributes
+* 🔍 *Diagnostics*: Validation errors, plan output analysis
+* 📚 *Hover docs*: Resource and provider documentation
+* ⚡ *Commands*: init, plan, apply, destroy directly from editor
+* 🛡️ *Fault isolation*: Crash in one adapter doesn't affect others
+
+== Supported IaC Tools
+
+[cols="1,1,1,1"]
+|===
+|Tool |License |Status |FOSS-First
+
+|*OpenTofu*
+|MPL-2.0
+|✅ Implemented
+|⭐ Preferred
+
+|*Pulumi*
+|Apache-2.0
+|✅ Implemented
+|⚠️ Requires backend
+
+|Terraform
+|BSL
+|❌ Not supported
+|❌ Proprietary license
+|===
+
+== Installation
+
+[source,bash]
+----
+git clone https://github.com/hyperpolymath/poly-iac-lsp
+cd poly-iac-lsp
+mix deps.get
+mix compile
+----
+
+== Usage
+
+=== Starting the LSP Server
+
+[source,bash]
+----
+mix run --no-halt
+----
+
+=== VSCode Extension
+
+The VSCode extension will be available in `vscode-extension/` once implemented.
+
+== Architecture
+
+Each IaC tool adapter runs as a GenServer process under a supervision tree:
+
+----
+PolyIaC.LSP.Supervisor
+├── PolyIaC.Adapters.Supervisor
+│   ├── PolyIaC.Adapters.OpenTofu (GenServer)
+│   └── PolyIaC.Adapters.Pulumi (GenServer)
+└── PolyIaC.LSP.Server (GenLSP)
+----
+
+* *Fault Isolation*: Adapter crashes are isolated and automatically restarted
+* *Concurrency*: BEAM VM handles parallel operations across multiple projects
+* *Hot Code Reload*: Update adapters without restarting the LSP server
+
+== Development
+
+=== Running Tests
+
+[source,bash]
+----
+just test
+----
+
+=== Quality Checks
+
+[source,bash]
+----
+just quality
+----
+
+=== Building Documentation
+
+[source,bash]
+----
+just docs
+----
+
+== Relationship to Other Projects
+
+* *poly-ssg-lsp*: Sister project providing LSP for static site generators
+* *poly-ssg-mcp*: Provides MCP (Model Context Protocol) integration for AI assistants
+
+== License
+
+PMPL-1.0-or-later
+
+== Author
+
+Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
